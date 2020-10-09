@@ -1,6 +1,9 @@
 # person
 async def run(server):
 
+    from pydantic import BaseModel
+    from typing import Optional
+
     Person = server.Person
     Office = server.Office
 
@@ -29,6 +32,10 @@ async def run(server):
         person = server.company['persons'][name]
         return {'name': person.name, 'age': person.age, 'office': person.office}
     
+    class PersonUpdate(BaseModel):
+        name: Optional[str]
+        age: Optional[str]
+
     # update person by name
     @server.api_route('/person/{name}', methods=['POST'])
     async def update_person_by_name(name: str, config: dict):
@@ -60,21 +67,35 @@ async def run(server):
         age = server.company['persons'][name].age
         return {"message": f"happy {age} birthday {name}!!"}
 
+    class PersonObj(BaseModel):
+        name: str
+        age: int
+        office: Optional[str]
+
     # person - new
     @server.api_route('/person', methods=['POST'])
-    async def person_add(person: dict):
+    async def person_add(person: PersonObj):
+        person = dict(person)
         if not ('name' in person and 'age' in person):
             return f"missing name/age for new person {person}"
         name, age = person['name'], person['age']
-        office = person['office'] if 'office' in person else None
+        office = None
+        if 'office' in person:
+            if person['office'] in server.company['offices']:
+                office = server.company['offices'][person['office']]
         if not name in server.company['persons']:
             new_person = Person(name, age, office)
             server.company['persons'][name] = new_person
+            if office:
+                office.start_working_for(new_person)
             return {'message': f"Person {new_person} created"}
 
+    class NewName(BaesModel):
+        name: str
     # person - name change / birthday
     @server.api_route('/person/{name}/change_name', methods=['POST'])
-    async def person_name_change(name: str, new_name: dict):
+    async def person_name_change(name: str, new_name: NewName):
+        new_name = dict(new_name)
         if not name in server.company['persons']:
             return "404, Person not found"
         if not 'name' in new_name:

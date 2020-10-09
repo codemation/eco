@@ -1,7 +1,7 @@
 # office
 async def run(server):
     from fastapi import Request
-    from apps import company
+    from pydantic import BaseModel
 
     class Office:
         def __init__(self, name: str):
@@ -182,11 +182,12 @@ async def run(server):
             })
         return {"offices": office_list}
     
-
+    class OfficeObj(BaseModel):
+        name: str
 
     # office - new
     @server.api_route('/office', methods=['POST'])
-    async def office_add(office: dict):
+    async def office_add(office: OfficeObj):
         if not ('name' in office):
             return f"missing name for new office"
         name = office['name']
@@ -207,10 +208,6 @@ async def run(server):
             'people_working': people_working_list
         }
 
-
-
-
-
     # office remove / add worker 
     @server.api_route('/office/{office_name}/person/{person_name}', methods=['POST'])
     async def add_person_to_office(office_name: str, person_name: str):
@@ -221,7 +218,8 @@ async def run(server):
         person = server.company['persons'][person_name]
         server.company['offices'][office_name].start_working_for(person)
         return {"message": f"{person_name} started working for {office_name}"}
-        
+    
+    # office remove person from working   
     @server.api_route('/office/{office_name}/person/{person_name}', methods=['DELETE'])
     async def delete_person_from_office(office_name: str, person_name: str):
         if not office_name in server.company['offices']:

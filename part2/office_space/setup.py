@@ -1,14 +1,11 @@
 def run(server):
-    import os, uuid
-    from fastapi.testclient import TestClient
-    from fastapi.websockets import WebSocket
-    import uvloop, asyncio, random
+    import os
+    import uvloop, asyncio
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-    event_loop = asyncio.get_event_loop()
-    server.event_loop = event_loop
+    server.event_loop = asyncio.get_event_loop()
 
     try:
-        import os
         cmddirPath = None
         realPath = None
         with open('./.cmddir', 'r') as cmddir:
@@ -28,13 +25,13 @@ def run(server):
         print(repr(e))
     async def setup():
 
-        from dbs import setup as dbsetup # TOO DOO -Change func name later
-        await dbsetup.run(server) # TOO DOO - Change func name later
+        from dbs import setup as dbsetup
+        await dbsetup.run(server) 
 
         from apps import setup
         await setup.run(server)
 
-    event_loop.create_task(
+    server.event_loop.create_task(
         setup()
     )
                 

@@ -1,6 +1,5 @@
 
 async def db_attach(server):
-    from apps import company
     db = server.data['office']
     if not 'offices' in db.tables:
         await db.create_table(
