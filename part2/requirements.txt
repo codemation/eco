@@ -2,3 +2,4 @@ aiopyql
 fastapi
 uvicorn
 uvloop
+requests
