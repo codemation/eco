@@ -1,0 +1,4 @@
+aiopyql
+fastapi
+uvicorn
+uvloop
