@@ -2,11 +2,13 @@ FROM joshjamison/python37:latest
 
 ENV PATH="$V_ENV/bin:$PATH"
 
-RUN git clone --single-branch --branch fastapi https://github.com/codemation/pyql-rest.git
+RUN git clone git@github.com:codemation/eco.git
+
+WORKDIR /eco/part2/
 
 RUN pip install -r pyql-rest/requirements.txt
 
-WORKDIR /pyql-rest/pyql-rest/
+WORKDIR /eco/part2/office_space
 
 EXPOSE 8190
 
