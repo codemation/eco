@@ -188,8 +188,7 @@ async def run(server):
     # office - new
     @server.api_route('/office', methods=['POST'])
     async def office_add(office: OfficeObj):
-        if not ('name' in office):
-            return f"missing name for new office"
+        office = dict(office)
         name = office['name']
         if not name in server.company['offices']:
             new_office = Office(name)
@@ -199,8 +198,6 @@ async def run(server):
     # get office
     @server.api_route('/office/{name}', methods=['GET'])
     async def get_office_by_name(name: str):
-        if not name in server.company['offices']:
-            return "404, office not found"
         office = server.company['offices'][name]
         people_working_list = [{'name': emp.name, 'age': emp.age} for emp in office.people_working]
         return {
