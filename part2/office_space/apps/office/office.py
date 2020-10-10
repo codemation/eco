@@ -198,6 +198,8 @@ async def run(server):
     # get office
     @server.api_route('/office/{name}', methods=['GET'])
     async def get_office_by_name(name: str):
+        if not name in server.company['offices']:
+            return f"404, {name} not found" 
         office = server.company['offices'][name]
         people_working_list = [{'name': emp.name, 'age': emp.age} for emp in office.people_working]
         return {
