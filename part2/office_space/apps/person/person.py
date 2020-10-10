@@ -90,7 +90,7 @@ async def run(server):
                 office.start_working_for(new_person)
             return {'message': f"Person {new_person} created"}
 
-    class NewName(BaesModel):
+    class NewName(BaseModel):
         name: str
     # person - name change / birthday
     @server.api_route('/person/{name}/change_name', methods=['POST'])

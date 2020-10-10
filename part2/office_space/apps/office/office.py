@@ -209,7 +209,7 @@ async def run(server):
         }
 
     # office remove / add worker 
-    @server.api_route('/office/{office_name}/person/{person_name}', methods=['POST'])
+    @server.api_route('/office/{office_name}/worker/{person_name}', methods=['POST'])
     async def add_person_to_office(office_name: str, person_name: str):
         if not office_name in server.company['offices']:
             return f"404, {office_name} not found"
@@ -220,7 +220,7 @@ async def run(server):
         return {"message": f"{person_name} started working for {office_name}"}
     
     # office remove person from working   
-    @server.api_route('/office/{office_name}/person/{person_name}', methods=['DELETE'])
+    @server.api_route('/office/{office_name}/worker/{person_name}', methods=['DELETE'])
     async def delete_person_from_office(office_name: str, person_name: str):
         if not office_name in server.company['offices']:
             return f"404, {office_name} not found"
