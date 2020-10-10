@@ -201,7 +201,12 @@ async def run(server):
         if not name in server.company['offices']:
             return f"404, {name} not found" 
         office = server.company['offices'][name]
-        people_working_list = [{'name': emp.name, 'age': emp.age} for emp in office.people_working]
+        people_working_list = [
+            {
+                'name': office.people_working[emp].name, 
+                'age': office.people_working[emp].age
+            } for emp in office.people_working
+        ]
         return {
             'name': office.name, 
             'people_working': people_working_list
