@@ -30,6 +30,7 @@ async def run(server):
         if not name in server.company['persons']:
             return "404, Person not found"
         person = server.company['persons'][name]
+        office = person.office.name if person.office is not None else None
         return {'name': person.name, 'age': person.age, 'office': person.office}
     
     class PersonUpdate(BaseModel):
